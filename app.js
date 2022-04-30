@@ -1,51 +1,87 @@
-// show items in web page
-import showLists from "./showLists.js";
-// drag
-import drag from "./drag.js";
+// acessing form and input
+const todoForm = document["todo-form"];
+const todoInput = todoForm["todo-input"];
 
-const todoText = document.getElementById("todoText");
-const newTodo = document.newTodo;
+// accessign other elements
+const listWrapper = document.querySelector(".list-wrapper");
 
-// add new item
-newTodo.addEventListener("submit", addToStorage);
-// display all items in the browser if item is found
-document.addEventListener("DOMContentLoaded", showLists);
+// form events
+todoForm.addEventListener("submit", addNewTodo);
 
-// adding new item
-function addToStorage(e) {
+// adding new todo
+function addNewTodo(e) {
   e.preventDefault();
+  let todoValue = todoInput.value.trim();
 
-  if (todoText.value.trim() == "") return;
+  if (!todoValue) return;
 
-  // adding item for first time
-  if (!localStorage.getItem("todos")) {
-    let lists = [];
+  try {
+    // for first time addig todo
+    if (getData() === null) {
+      storeData([todoValue]);
 
-    lists.push(todoText.value.trim());
+      listWrapper.innerHTML = "";
 
-    const stringifyLists = JSON.stringify(lists);
+      insertTodoInDOM(todoValue);
 
-    localStorage.setItem("todos", stringifyLists);
+      todoForm.reset();
+      return;
+    }
 
-    showLists();
+    // adding new todos
+    const items = getData();
 
-    todoText.value = "";
+    items.push(todoValue);
+
+    storeData(items);
+
+    insertTodoInDOM(todoValue);
+
+    todoForm.reset();
+  } catch (error) {
+    console.log(error);
+    console.log("something went wrong");
+  }
+}
+
+// insert new todo in DOM
+function insertTodoInDOM(value) {
+  let li = `<li><span class="todo-name">${value}</span></li>`;
+  listWrapper.innerHTML += li;
+}
+
+// add todo list in localStorage
+function storeData(data) {
+  return localStorage.setItem("todo-list", JSON.stringify(data));
+}
+
+// get todo list from localStorage
+function getData() {
+  if (localStorage.getItem("todo-list") == "") {
+    return null;
+  }
+
+  return JSON.parse(localStorage.getItem("todo-list"));
+}
+
+// show todos when DOM load for the first time
+document.addEventListener("DOMContentLoaded", showTodos);
+
+function showTodos() {
+  if (getData() !== null) {
+    const data = getData();
+
+    // remove if any elements present already
+    listWrapper.innerHTML = "";
+
+    data.forEach((item) => {
+      insertTodoInDOM(item);
+    });
+
     return;
   }
 
-  // adding new list item
-  const getLists = localStorage.getItem("todos");
+  listWrapper.innerHTML = "";
 
-  const parseLists = JSON.parse(getLists);
-
-  parseLists.push(todoText.value.trim());
-
-  localStorage.setItem("todos", JSON.stringify(parseLists));
-
-  showLists();
-
-  todoText.value = "";
+  insertTodoInDOM("Record Not Found!");
 }
-
-// drag
-drag();

@@ -4,12 +4,73 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <!-- font awesome  -->
+    <script
+      src="https://kit.fontawesome.com/8f43bae13d.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- custom js  -->
     <script type="module" src="./app.js" defer></script>
+    <!-- custom css  -->
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <h1 id="title">Brave Medium's TODO</h1>
+    <div class="container">
+      <h1 class="heading">Brave medium's todo</h1>
 
-    
+      <!--  -->
+      <div class="action-box">
+        <form name="todo-form" autocomplete="off">
+          <div class="input-group">
+            <input type="text" placeholder="add new todo" name="todo-input" />
+            <button id="add-btn" type="submit">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!--  -->
+      <div class="wrapper">
+        <ul class="list-wrapper"></ul>
+      </div>
+
+      <!--  -->
+      <div id="floating-box">
+        <div id="drawer">
+          <button class="edit-btn">
+            <i class="fa-solid fa-pen-to-square"></i>
+          </button>
+          <button class="delete-btn">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div>
+        <button id="float-btn">
+          <i class="fa-solid fa-ellipsis-vertical"></i>
+        </button>
+      </div>
+    </div>
   </body>
 </html>
+
+<!-- 
+
+            <li>
+            <span class="todo-name">Coading</span>
+            <button id="delete-item">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </li>
+          <li>
+            <span class="todo-name">Workout</span>
+            <button id="edit-item">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+          </li>
+          <li>
+            <input type="text" value="Brainstorming" id="edit-input" />
+            <button id="edit-item">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+          </li>
+ -->
