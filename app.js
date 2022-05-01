@@ -1,87 +1,71 @@
+// importing utilities
+import {
+  showTodos,
+  addNewTodo,
+  listWrapper,
+  getData,
+  storeData,
+  insertTodoInDOM,
+} from "./config/vandor.js";
+
 // acessing form and input
 const todoForm = document["todo-form"];
-const todoInput = todoForm["todo-input"];
-
-// accessign other elements
-const listWrapper = document.querySelector(".list-wrapper");
-
-// form events
-todoForm.addEventListener("submit", addNewTodo);
 
 // adding new todo
-function addNewTodo(e) {
-  e.preventDefault();
-  let todoValue = todoInput.value.trim();
-
-  if (!todoValue) return;
-
-  try {
-    // for first time addig todo
-    if (getData() === null) {
-      storeData([todoValue]);
-
-      listWrapper.innerHTML = "";
-
-      insertTodoInDOM(todoValue);
-
-      todoForm.reset();
-      return;
-    }
-
-    // adding new todos
-    const items = getData();
-
-    items.push(todoValue);
-
-    storeData(items);
-
-    insertTodoInDOM(todoValue);
-
-    todoForm.reset();
-  } catch (error) {
-    console.log(error);
-    console.log("something went wrong");
-  }
-}
-
-// insert new todo in DOM
-function insertTodoInDOM(value) {
-  let li = `<li><span class="todo-name">${value}</span></li>`;
-  listWrapper.innerHTML += li;
-}
-
-// add todo list in localStorage
-function storeData(data) {
-  return localStorage.setItem("todo-list", JSON.stringify(data));
-}
-
-// get todo list from localStorage
-function getData() {
-  if (localStorage.getItem("todo-list") == "") {
-    return null;
-  }
-
-  return JSON.parse(localStorage.getItem("todo-list"));
-}
+todoForm.addEventListener("submit", addNewTodo);
 
 // show todos when DOM load for the first time
 document.addEventListener("DOMContentLoaded", showTodos);
 
-function showTodos() {
-  if (getData() !== null) {
-    const data = getData();
+// delete todo feature
+const deleteBtn = document.querySelector(".delete-btn");
 
-    // remove if any elements present already
-    listWrapper.innerHTML = "";
+function insertActionBtns() {
+  const deleteItem = listWrapper.querySelector(".delete-item");
 
-    data.forEach((item) => {
-      insertTodoInDOM(item);
+  if (deleteItem !== null) return;
+
+  const li = listWrapper.querySelectorAll("li");
+  li.forEach((el, i) => {
+    const deleteItems = `
+    <button class="delete-item" data-id="${i}">
+      <i class="fa-solid fa-trash"></i>
+    </button>`;
+
+    el.insertAdjacentHTML("beforeend", deleteItems);
+  });
+}
+
+deleteBtn.addEventListener("click", () => {
+  insertActionBtns();
+
+  deleteBtnAdded();
+});
+
+function deleteBtnAdded() {
+  const btns = listWrapper.querySelectorAll(".delete-item");
+
+  btns.forEach((btn , i) => {
+    btn.addEventListener("click", (e) => {
+      let id = btn.dataset.id;
+
+      let items = getData();
+
+      // console.log("before", items);
+
+      items.splice(id, 1);
+
+      storeData(items);
+
+      // showTodos();
+      // insertActionBtns();
+
+
+
+      // console.log("after", items);
+
+      console.log(id);
+      console.log(i);
     });
-
-    return;
-  }
-
-  listWrapper.innerHTML = "";
-
-  insertTodoInDOM("Record Not Found!");
+  });
 }
