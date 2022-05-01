@@ -42,3 +42,13 @@ export function noRecord() {
 
   insertTodoInDOM("Record Not Found!");
 }
+
+export function debounce(cb) {
+  let id;
+  return (...args) => {
+    clearTimeout(id);
+    id = setTimeout(() => {
+      cb(...args);
+    }, 8000);
+  };
+}

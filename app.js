@@ -5,8 +5,8 @@ import {
   listWrapper,
   getData,
   storeData,
-  insertTodoInDOM,
   noRecord,
+  debounce,
 } from "./config/vandor.js";
 
 // acessing form and input
@@ -45,6 +45,8 @@ deleteBtn.addEventListener("click", () => {
   deleteBtnAdded();
 });
 
+const updateUI = debounce((cb) => cb());
+
 function deleteBtnAdded() {
   const btns = listWrapper.querySelectorAll(".delete-item");
 
@@ -67,6 +69,8 @@ function deleteBtnAdded() {
       showTodos();
       insertActionBtns();
       deleteBtnAdded();
+
+      updateUI(showTodos);
     });
   });
 }
