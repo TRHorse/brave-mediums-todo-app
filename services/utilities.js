@@ -34,8 +34,11 @@ export function showTodos() {
     return;
   }
 
+  noRecord();
+}
+
+export function noRecord() {
   listWrapper.innerHTML = "";
 
-  console.log("hello");
   insertTodoInDOM("Record Not Found!");
 }

@@ -6,6 +6,7 @@ import {
   getData,
   storeData,
   insertTodoInDOM,
+  noRecord,
 } from "./config/vandor.js";
 
 // acessing form and input
@@ -22,6 +23,8 @@ const deleteBtn = document.querySelector(".delete-btn");
 
 function insertActionBtns() {
   const deleteItem = listWrapper.querySelector(".delete-item");
+
+  if (getData() === null) return;
 
   if (deleteItem !== null) return;
 
@@ -45,27 +48,25 @@ deleteBtn.addEventListener("click", () => {
 function deleteBtnAdded() {
   const btns = listWrapper.querySelectorAll(".delete-item");
 
-  btns.forEach((btn , i) => {
+  btns.forEach((btn) => {
     btn.addEventListener("click", (e) => {
       let id = btn.dataset.id;
 
       let items = getData();
 
-      // console.log("before", items);
+      if (items.length == 1) {
+        localStorage.removeItem("todo-list");
+        noRecord();
+        return;
+      }
 
       items.splice(id, 1);
 
       storeData(items);
 
-      // showTodos();
-      // insertActionBtns();
-
-
-
-      // console.log("after", items);
-
-      console.log(id);
-      console.log(i);
+      showTodos();
+      insertActionBtns();
+      deleteBtnAdded();
     });
   });
 }
