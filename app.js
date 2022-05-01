@@ -43,6 +43,8 @@ deleteBtn.addEventListener("click", () => {
   insertActionBtns();
 
   deleteBtnAdded();
+
+  updateUI(showTodos);
 });
 
 const updateUI = debounce((cb) => cb());
